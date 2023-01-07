@@ -1,6 +1,16 @@
 <?php
 include('koneksi.php');
 $result = mysqli_query($mysqli, "SELECT * FROM mahasiswa ORDER BY id DESC");
+
+$id = $_GET['id'] ?? null;
+if ($id) {
+    $result_edit = mysqli_query($mysqli, "SELECT * FROM mahasiswa WHERE id=$id");
+
+    while ($user_data = mysqli_fetch_array($result_edit)) {
+        $nama = $user_data['nama'];
+        $umur = $user_data['umur'];
+    }
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -16,14 +26,15 @@ $result = mysqli_query($mysqli, "SELECT * FROM mahasiswa ORDER BY id DESC");
     <h1>Selamat Datang</h1>
 
     <form action="simpan.php" method="post">
+        <input type="hidden" name="id" value="<?= $id ?? '' ?>">
         <label for="">Nama</label><br>
-        <input type="text" name="nama">
+        <input type="text" name="nama" value="<?= $nama ?? '' ?>">
         <br>
         <label for="">Umur</label><br>
-        <input type="text" name="umur">
+        <input type="text" name="umur" value="<?= $umur ?? '' ?>">
         <br>
         <br>
-        <button type="submit">Simpan</button>
+        <button type=" submit">Simpan</button>
     </form>
     <hr>
     <h2>Data</h2>
@@ -33,7 +44,7 @@ $result = mysqli_query($mysqli, "SELECT * FROM mahasiswa ORDER BY id DESC");
             echo "<tr>";
             echo "<td>" . $user_data['nama'] . "</td>";
             echo "<td>" . $user_data['umur'] . "</td>";
-            echo "<td><a href='edit.php?id=$user_data[id]'>Edit</a> | <a href='delete.php?id=$user_data[id]'>Delete</a></td></tr>";
+            echo "<td><a href='index.php?id=$user_data[id]'>Edit</a> | <a href='delete.php?id=$user_data[id]'>Delete</a></td></tr>";
         }
         ?>
     </table>
